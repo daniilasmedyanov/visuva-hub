@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VISUVA · Дашборды</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f7;
+    --surface:#ffffff;
+    --ink:#0f1115;
+    --ink-2:#3a4150;
+    --ink-3:#8a91a0;
+    --ink-4:#aab0bd;
+    --line:#e7e9ee;
+    --line-2:#eef0f4;
+    --blue:#2f6bff;
+    --blue-soft:#eaf0ff;
+    --green:#16a34a;
+    --green-soft:#e8f6ec;
+    --amber:#d97706;
+    --amber-soft:#fdf2e3;
+    --r-card:16px;
+    --shadow:0 1px 2px rgba(16,17,21,.04), 0 4px 16px rgba(16,17,21,.05);
+    --shadow-hover:0 2px 4px rgba(16,17,21,.06), 0 12px 32px rgba(16,17,21,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink); min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* top bar */
+  .topbar{
+    background:var(--surface); border-bottom:1px solid var(--line);
+    padding:0 clamp(16px,4vw,40px); height:60px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:10;
+  }
+  .logo{display:flex;align-items:center;text-decoration:none}
+  .logo svg{height:26px;width:auto;display:block}
+  .status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-3)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 80px}
+
+  .head{margin-bottom:clamp(22px,4vw,32px)}
+  .head h1{font-size:clamp(22px,3.4vw,28px);font-weight:700;letter-spacing:-.02em}
+  .head p{font-size:15px;color:var(--ink-3);margin-top:6px}
+
+  .search{position:relative;margin-bottom:clamp(24px,4vw,34px);max-width:460px}
+  .search input{
+    width:100%;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px 12px 42px;color:var(--ink);
+    font-family:inherit;font-size:14.5px;outline:none;transition:.16s;box-shadow:var(--shadow)}
+  .search input::placeholder{color:var(--ink-4)}
+  .search input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-4)}
+
+  .section{margin-bottom:clamp(26px,4vw,38px)}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .sec-head h2{font-size:12.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+  .sec-head .line{flex:1;height:1px;background:var(--line)}
+  .sec-head .count{font-size:12px;color:var(--ink-4);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+    padding:20px;box-shadow:var(--shadow);
+    transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .18s,border-color .18s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--line-2)}
+  .card .top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+  .badge{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none}
+  .badge svg{width:21px;height:21px}
+  .arrow{color:var(--ink-4);transition:transform .18s,color .18s;margin-top:2px}
+  .card:hover .arrow{color:var(--blue);transform:translate(2px,-2px)}
+  .card h3{font-size:16.5px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
+  .card p{font-size:13.5px;color:var(--ink-3);line-height:1.5}
+  .meta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .pill{font-size:11px;font-weight:600;letter-spacing:.02em;padding:3px 9px;border-radius:7px}
+  .pill.web{color:var(--blue);background:var(--blue-soft)}
+  .pill.tg{color:#1d8fd1;background:#e6f4fb}
+  .pill.http{color:var(--amber);background:var(--amber-soft)}
+
+  .empty{display:none;text-align:center;color:var(--ink-4);padding:48px 0;font-size:14px}
+  footer{margin-top:36px;font-size:12.5px;color:var(--ink-4);text-align:center}
+
+  @media(max-width:540px){.grid{grid-template-columns:1fr}.status span.t{display:none}}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="logo" href="#" aria-label="VISUVA">
+      <svg viewBox="0 0 1192 159" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VISUVA">
+        <g clip-path="url(#vlogo_clip)">
+        <path d="M259.007 40.21H239.797V157.51H259.007V40.21Z" fill="#191718"/>
+        <path d="M487.313 99.1801C484.219 96.0943 480.572 93.618 476.563 91.8801C472.353 90.0715 467.815 89.1523 463.233 89.1801H319.513C317.575 89.1913 315.654 88.8189 313.86 88.0844C312.067 87.3498 310.436 86.2676 309.063 84.9001C307.696 83.5098 306.598 81.8792 305.823 80.0901C305.028 78.2639 304.622 76.2919 304.633 74.3001C304.612 72.3332 305.018 70.3852 305.823 68.5901C307.401 65.0208 310.253 62.1683 313.823 60.5901C315.614 59.7857 317.559 59.3797 319.523 59.4001H490.453V40.2101H319.513C314.961 40.1964 310.455 41.1153 306.273 42.9101C298.115 46.3683 291.613 52.8518 288.133 61.0001C286.312 65.2101 285.389 69.7534 285.423 74.3401C285.398 78.9411 286.317 83.4983 288.123 87.7301C291.574 95.9155 298.087 102.429 306.273 105.88C310.455 107.676 314.961 108.595 319.513 108.58H463.233C465.206 108.566 467.162 108.951 468.983 109.71C470.733 110.45 472.326 111.519 473.673 112.86C475.044 114.243 476.143 115.871 476.913 117.66C477.715 119.488 478.124 121.464 478.113 123.46C478.127 125.423 477.722 127.367 476.923 129.16C475.349 132.733 472.495 135.587 468.923 137.16C467.134 137.961 465.193 138.364 463.233 138.34H292.233V157.55H463.233C467.816 157.582 472.356 156.659 476.563 154.84C484.696 151.351 491.164 144.851 494.613 136.7C496.407 132.517 497.326 128.011 497.313 123.46C497.336 118.856 496.417 114.296 494.613 110.06C492.894 106.002 490.416 102.309 487.313 99.1801Z" fill="#191718"/>
+        <path d="M715.771 138.3H582.221C576.96 138.338 571.749 137.279 566.921 135.19C562.247 133.17 557.996 130.286 554.391 126.69C550.799 123.079 547.913 118.83 545.881 114.16C543.799 109.33 542.74 104.12 542.771 98.86V40.21H523.571V98.86C523.536 106.698 525.105 114.461 528.181 121.67C534.123 135.75 545.329 146.952 559.411 152.89C566.617 155.976 574.381 157.549 582.221 157.51H735.001V40.21H715.771V138.3Z" fill="#191718"/>
+        <path d="M867.101 130.58L783.961 40.21H757.781L867.101 158.85L976.591 40.21H950.401L867.101 130.58Z" fill="#191718"/>
+        <path d="M1186.71 75.9998C1183.75 69.0885 1179.52 62.7907 1174.25 57.4298C1168.91 52.0828 1162.6 47.8149 1155.65 44.8598C1148.44 41.7837 1140.68 40.2149 1132.84 40.2498H1038.57C1030.75 40.2083 1023.01 41.7811 1015.83 44.8698C1001.82 50.8414 990.671 61.9954 984.699 75.9998C981.609 83.1808 980.037 90.9226 980.079 98.7398V157.55H999.279V121.62H1172.13V157.51H1191.33V98.6998C1191.36 90.8962 1189.79 83.169 1186.71 75.9998ZM1172.13 98.6998V102.41H999.279V98.6998C999.254 93.4911 1000.32 88.3345 1002.4 83.5598C1006.46 74.1371 1013.98 66.6245 1023.4 62.5598C1028.17 60.4788 1033.33 59.4162 1038.54 59.4398H1132.81C1138.07 59.4051 1143.28 60.4677 1148.11 62.5598C1152.78 64.5849 1157.03 67.4681 1160.64 71.0598C1164.22 74.6527 1167.07 78.8997 1169.05 83.5698C1171.09 88.3524 1172.14 93.4999 1172.13 98.6998Z" fill="#191718"/>
+        <path d="M112.48 140.44L110.27 138.04L110.25 138.03L108.66 136.3L102.71 129.86L102.67 129.82L100.46 127.44L89.5 115.58L89.46 115.63L73.22 97.9699L72.38 97.0599L19.53 39.6099H0L108.57 157.44L118.37 146.82V146.81L112.49 140.44H112.48Z" fill="#191718"/>
+        <path d="M138.93 39.6099L180.61 79.3499L180.8 79.1499L181 78.9999L181.71 78.2299L217.3 39.6099H138.93Z" fill="#191718"/>
+        <path d="M141.477 138.74L133.337 130.59L123.237 120.47L103.087 100.28L95.0875 92.21L94.6675 91.79L79.3475 76.5L23.4375 20.5L77.6075 81.63L93.4575 99.51L93.9275 100.04L98.6075 105.31L117.527 126.66L126.997 137.42L132.587 143.72L137.287 149.02L137.757 149.56C138.607 149.56 139.458 149.63 140.318 149.63C143.937 149.634 147.545 149.214 151.068 148.38L150.647 147.97L141.477 138.74Z" fill="#191718"/>
+        <path d="M168.999 139.23L158.839 129L146.379 116.47L136.299 106.32L115.909 85.8398L103.909 73.7698L103.559 73.4198L86.2794 55.9998L33.3594 2.83984L84.7294 60.6198L100.269 78.0998L100.619 78.4898L111.529 90.7698L130.729 112.36L140.269 123.08L149.999 134L159.719 144.93L160.079 145.32C163.407 143.783 166.542 141.86 169.419 139.59L169.069 139.24L168.999 139.23Z" fill="#191718"/>
+        <path d="M175.863 119.43L159.163 102.62L149.063 92.46L128.463 71.72L118.463 61.63L118.093 61.25L102.533 45.62L57.2031 0L99.3631 47.37L114.003 63.76L114.343 64.14L124.803 75.89L144.203 97.74L153.753 108.48L167.623 124.06L175.563 132.99L175.893 133.36C178.078 130.85 179.989 128.115 181.593 125.2L181.213 124.82L175.863 119.43Z" fill="#191718"/>
+        <path d="M171.753 88.9998L161.623 78.8398L140.713 57.9198L138.933 56.1398L138.443 55.6598L119.183 36.3898L98.3828 15.5898L117.563 37.2898L134.133 55.9998L134.523 56.4498L138.253 60.6598L157.883 82.8998L167.413 93.6698L185.413 114.06L185.813 114.52C185.893 114.25 185.953 113.99 186.013 113.71C186.749 110.708 187.181 107.639 187.303 104.55L186.813 104.06L171.753 88.9998Z" fill="#191718"/>
+        </g>
+        <defs><clipPath id="vlogo_clip"><rect width="1191.33" height="158.85" fill="white"/></clipPath></defs>
+      </svg>
+    </a>
+    <div class="status"><span class="dot"></span><span class="t">обновлено&nbsp;</span><span id="clock">—</span></div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="head">
+      <h1>Дашборды</h1>
+      <p>Все отчёты и панели в одном месте</p>
+    </div>
+
+    <div class="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" placeholder="Поиск дашборда…" autocomplete="off">
+    </div>
+
+    <!-- ПРОИЗВОДСТВО -->
+    <section class="section" data-sec>
+      <div class="sec-head">
+        <h2>Производство</h2>
+        <div class="line"></div>
+        <span class="count" data-count></span>
+      </div>
+      <div class="grid">
+
+        <a class="card" target="_blank" rel="noopener" href="https://daniilasmedyanov.github.io/productionV1/" data-name="производство выпуск линии смены план факт">
+          <div class="top">
+            <div class="badge" style="background:var(--blue-soft);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/></svg></div>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </div>
+          <h3>Производство</h3>
+          <p>Выпуск, загрузка линий, план/факт по сменам</p>
+          <div class="meta"><span class="pill web">Веб</span></div>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://daniilasmedyanov.github.io/productionMaster/" data-name="мастера участки формовка сварка сборка полиуретан кузовная операции">
+          <div class="top">
+            <div class="badge" style="background:var(--green-soft);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </div>
+          <h3>Мастера</h3>
+          <p>Отметка фактических дат по операциям и участкам</p>
+          <div class="meta"><span class="pill web">Веб</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- УПРАВЛЕНИЕ -->
+    <section class="section" data-sec>
+      <div class="sec-head">
+        <h2>Управление</h2>
+        <div class="line"></div>
+        <span class="count" data-count></span>
+      </div>
+      <div class="grid">
+
+        <a class="card" target="_blank" rel="noopener" href="http://159.194.214.38/" data-name="управленческий финансы баланс счёт фонды кассовый разрыв">
+          <div class="top">
+            <div class="badge" style="background:var(--blue-soft);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </div>
+          <h3>Управленческий</h3>
+          <p>Баланс на счёте, фонды, поступления и расходы</p>
+          <div class="meta"><span class="pill web">Веб</span><span class="pill http">http</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- БАЗА ЗНАНИЙ -->
+    <section class="section" data-sec>
+      <div class="sec-head">
+        <h2>База знаний</h2>
+        <div class="line"></div>
+        <span class="count" data-count></span>
+      </div>
+      <div class="grid">
+
+        <a class="card" target="_blank" rel="noopener" href="https://t.me/data_base_visuva_bot" data-name="база знаний бот телеграм telegram справка">
+          <div class="top">
+            <div class="badge" style="background:#e6f4fb;color:#1d8fd1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </div>
+          <h3>База знаний</h3>
+          <p>Telegram-бот со справочной информацией</p>
+          <div class="meta"><span class="pill tg">Telegram</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="empty" id="empty">Ничего не найдено</div>
+
+    <footer>VISUVA · добавляйте новые дашборды в HTML</footer>
+
+  </div>
+
+<script>
+  function tick(){
+    var d=new Date();
+    document.getElementById('clock').textContent=d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  }
+  tick(); setInterval(tick,30000);
+
+  document.querySelectorAll('[data-count]').forEach(function(c){
+    c.textContent=c.closest('[data-sec]').querySelectorAll('.card').length;
+  });
+
+  var search=document.getElementById('search'), empty=document.getElementById('empty');
+  search.addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase(), anyVisible=false;
+    document.querySelectorAll('[data-sec]').forEach(function(sec){
+      var secHas=false;
+      sec.querySelectorAll('.card').forEach(function(card){
+        var hay=(card.getAttribute('data-name')+' '+card.querySelector('h3').textContent+' '+card.querySelector('p').textContent).toLowerCase();
+        var match=hay.indexOf(q)>-1;
+        card.style.display=match?'':'none';
+        if(match){secHas=true;anyVisible=true;}
+      });
+      sec.style.display=secHas?'':'none';
+    });
+    empty.style.display=anyVisible?'none':'block';
+  });
+</script>
+</body>
+</html>
